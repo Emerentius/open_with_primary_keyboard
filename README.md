@@ -14,5 +14,6 @@ As the programs only quey the primary keyboad layout on startup, the solution is
 
 These scripts do just that. I've added wrappers for the affected programs that override the original executables and desktop files in these locations:
 
-`~/bin/`  for binaries so it works in the terminal
-`~/.local/share/applications` so it works with GUI application shortcuts in Gnome
+* `~/bin/`  for binaries so it works in the terminal.
+  There is a generic wrapper in this repo called `run_exe_with_neo_keyboard_wrapper.sh`. This can be copied and renamed to the same name as the executable to be wrapped. It will figure out what to call from its own name. It just needs to be placed somewhere on the PATH before the actual executable.  
+* `~/.local/share/applications` so it works with GUI application shortcuts in Gnome
