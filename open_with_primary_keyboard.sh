@@ -22,10 +22,8 @@ new_sources=${new_sources/"${primary_keyboard}"/}
 new_sources="${new_sources/[/[$primary_keyboard, }"
 #echo "new: $new_sources"
 
+# This is definitely racy
 gsettings set org.gnome.desktop.input-sources sources "$new_sources"
+(sleep 2 && gsettings set org.gnome.desktop.input-sources sources "$old_sources") & disown
+$program "$@"
 
-$program "$@" &
-
-gsettings set org.gnome.desktop.input-sources sources "$old_sources"
-
-fg
