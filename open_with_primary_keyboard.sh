@@ -22,8 +22,20 @@ new_sources=${new_sources/"${primary_keyboard}"/}
 new_sources="${new_sources/[/[$primary_keyboard, }"
 #echo "new: $new_sources"
 
-# This is definitely racy
-gsettings set org.gnome.desktop.input-sources sources "$new_sources"
-(sleep 2 && gsettings set org.gnome.desktop.input-sources sources "$old_sources") & disown
+if [[ "$new_sources" != "$old_sources" ]]; then
+	# This is definitely racy.
+	# By avoiding changes to the setting if we already have the desired
+	# setting, we avoid problems in some circumstances,
+	# i.e. when a command is run multiple times in quick succession.
+	# The first run will change the setting and schedule a reset to the original setting.
+	# Every run thereafter will not schedule a change until the previous reset has run through.
+	# If the programs all want the same primary keyboard setting, then the original setting
+	# shouldn't be lost that way no matter how many processes are run.
+	# If two programs want different primary keyboards, then the original setting may still be lost.
+
+	gsettings set org.gnome.desktop.input-sources sources "$new_sources"
+	(sleep 2 && gsettings set org.gnome.desktop.input-sources sources "$old_sources") & disown
+fi
+
 $program "$@"
 
