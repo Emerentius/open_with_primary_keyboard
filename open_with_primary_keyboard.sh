@@ -34,7 +34,7 @@ if [[ "$new_sources" != "$old_sources" ]]; then
 	# If two programs want different primary keyboards, then the original setting may still be lost.
 
 	gsettings set org.gnome.desktop.input-sources sources "$new_sources"
-	nohup bash -c "(sleep 2 && gsettings set org.gnome.desktop.input-sources sources \"$old_sources\")" & disown
+	nohup bash -c "(sleep 5 && gsettings set org.gnome.desktop.input-sources sources \"$old_sources\")" & disown
 fi
 
 $program "$@"
